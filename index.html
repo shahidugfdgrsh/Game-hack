@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game Generator Prank</title>
+    <style>
+        body {
+            text-align: center;
+            font-family: Arial, sans-serif;
+            background-color: #111;
+            color: white;
+        }
+        .container {
+            margin-top: 50px;
+        }
+        button {
+            display: block;
+            margin: 10px auto;
+            padding: 10px;
+            font-size: 18px;
+            width: 80%;
+            max-width: 300px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        #gameScreen, #idConfirmScreen, #currencyScreen, #loading, #result, #giftCardScreen {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Home Page -->
+    <div id="homeScreen">
+        <h1>Welcome to Game Generator</h1>
+        <h2>List of Games</h2>
+        <button onclick="selectGame('Free Fire', 'Diamonds')">Free Fire</button>
+        <button onclick="selectGame('PUBG', 'UC')">PUBG</button>
+        <button onclick="selectGame('CODM', 'CP')">CODM</button>
+        <button onclick="selectGame('Fortnite', 'V-Bucks')">Fortnite</button>
+        <button onclick="selectGiftCard('Google Play')">Google Play Gift Cards</button>
+        <button onclick="selectGiftCard('Steam')">Steam Gift Cards</button>
+    </div>
+
+    <!-- Enter ID -->
+    <div id="gameScreen">
+        <h2 id="gameTitle"></h2>
+        <p>Enter your Player ID:</p>
+        <input type="text" id="playerID" placeholder="Enter ID">
+        <button onclick="confirmID()">Next</button>
+    </div>
+
+    <!-- Confirm ID -->
+    <div id="idConfirmScreen">
+        <h2>Confirm Your ID</h2>
+        <p>Your entered ID: <span id="displayID"></span></p>
+        <button onclick="goBack()">Go Back</button>
+        <button onclick="proceedToCurrency()">Confirm</button>
+    </div>
+
+    <!-- Enter Currency Amount -->
+    <div id="currencyScreen">
+        <h2>Enter Amount</h2>
+        <p>Enter the amount of <span id="currencyType"></span>:</p>
+        <input type="number" id="amount" placeholder="Enter amount">
+        <button onclick="startGenerator()">Generate</button>
+    </div>
+
+    <!-- Fake Loading -->
+    <div id="loading">
+        <h2>Generating...</h2>
+        <p>Please wait...</p>
+    </div>
+
+    <!-- Fake Success Message -->
+    <div id="result">
+        <h2>✅ Diamonds Sent!</h2>
+        <p>Diamonds Sent <b>Thank you for using our website!</b> ✅</p>
+        <button onclick="goHome()">Back to Home</button>
+    </div>
+
+    <!-- Gift Card Generator -->
+    <div id="giftCardScreen">
+        <h2>✅ Code Generated!</h2>
+        <p>Your Gift Card Code: <b id="giftCardCode"></b></p>
+        <button onclick="goHome()">Back to Home</button>
+    </div>
+
+    <script>
+        let selectedGame = "";
+        let selectedCurrency = "";
+
+        function selectGame(game, currency) {
+            selectedGame = game;
+            selectedCurrency = currency;
+            document.getElementById("homeScreen").style.display = "none";
+            document.getElementById("gameScreen").style.display = "block";
+            document.getElementById("gameTitle").innerText = game + " Generator";
+        }
+
+        function confirmID() {
+            let playerID = document.getElementById("playerID").value;
+            if (playerID === "") {
+                alert("Please enter your ID!");
+                return;
+            }
+            document.getElementById("gameScreen").style.display = "none";
+            document.getElementById("idConfirmScreen").style.display = "block";
+            document.getElementById("displayID").innerText = playerID;
+        }
+
+        function goBack() {
+            document.getElementById("idConfirmScreen").style.display = "none";
+            document.getElementById("gameScreen").style.display = "block";
+        }
+
+        function proceedToCurrency() {
+            document.getElementById("idConfirmScreen").style.display = "none";
+            document.getElementById("currencyScreen").style.display = "block";
+            document.getElementById("currencyType").innerText = selectedCurrency;
+        }
+
+        function startGenerator() {
+            let amount = document.getElementById("amount").value;
+            if (amount === "") {
+                alert("Please enter an amount!");
+                return;
+            }
+            document.getElementById("currencyScreen").style.display = "none";
+            document.getElementById("loading").style.display = "block";
+
+            setTimeout(() => {
+                document.getElementById("loading").style.display = "none";
+                document.getElementById("result").style.display = "block";
+            }, 10000);
+        }
+
+        function selectGiftCard(type) {
+            document.getElementById("homeScreen").style.display = "none";
+            document.getElementById("loading").style.display = "block";
+
+            setTimeout(() => {
+                document.getElementById("loading").style.display = "none";
+                document.getElementById("giftCardScreen").style.display = "block";
+                document.getElementById("giftCardCode").innerText = generateCode();
+            }, 10000);
+        }
+
+        function generateCode() {
+            let characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+            let code = "";
+            for (let i = 0; i < 15; i++) {
+                code += characters.charAt(Math.floor(Math.random() * characters.length));
+                if ((i + 1) % 4 === 0 && i !== 14) code += "-";
+            }
+            return code;
+        }
+
+        function goHome() {
+            document.querySelectorAll("div").forEach(div => div.style.display = "none");
+            document.getElementById("homeScreen").style.display = "block";
+        }
+    </script>
+
+</body>
+</html>
